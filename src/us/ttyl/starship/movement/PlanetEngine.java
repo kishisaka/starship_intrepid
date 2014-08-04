@@ -2,13 +2,10 @@ package us.ttyl.starship.movement;
 
 public class PlanetEngine extends MovementEngine
 {
-	private int mOrbitRadius;
-	
 	public PlanetEngine(int x, int y, int orbitRadius)
 	{
 		_currentX = (double)x;
 		_currentY = (double)y;
-		mOrbitRadius = orbitRadius;
 	}
 	
 	@Override

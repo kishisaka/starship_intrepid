@@ -1,10 +1,7 @@
 package us.ttyl.starship.core;
 
 import us.ttyl.starship.display.MapDisplay;
-
 import us.ttyl.starship.display.MovementDisplay;
-import us.ttyl.starship.env.EnvBuilder;
-import us.ttyl.starship.movement.CircleEngine;
 import us.ttyl.starship.movement.FreeEngine;
 import us.ttyl.starship.movement.MovementEngine;
 
