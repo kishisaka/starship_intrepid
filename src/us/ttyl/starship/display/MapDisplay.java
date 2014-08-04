@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,12 +17,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import us.ttyl.starship.core.GameState;
-import us.ttyl.starship.core.Utils;
+import us.ttyl.starship.core.GameUtils;
 import us.ttyl.starship.movement.FollowEngine;
 import us.ttyl.starship.movement.LineEngine;
 import us.ttyl.starship.movement.MovementEngine;
 
-public class MapDisplay extends JPanel implements KeyListener, MouseListener
+public class MapDisplay extends JPanel implements KeyListener, MouseListener, MouseMotionListener
 {	
   private static final long serialVersionUID = 1L;
   
@@ -59,6 +60,9 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
     //get mouse presses
     f.addMouseListener(this);
     
+    //get mouse movement
+    f.addMouseMotionListener(this);
+    
     f.getContentPane().add(this);
     f.pack();
     f.setSize(500,500);
@@ -68,37 +72,56 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
   @Override
   public void paintComponent(Graphics g)
   {
-    //set center target
-    MovementEngine me = GameState._weapons.elementAt(_selected);
-    double centerX = (int)me.getX();
-    double centerY = (int)me.getY();
-
-    //clear radar
-    g.setColor(new Color(0,0,0));
-    g.fillRect(0,0,500,500);
-
-    //draw center target (selected)
-    g.setColor(new Color(255,0,0));
-    g.fillRect(250,250,3,3);
-
-    //draw all other targets relative to center target, don't draw center target
-    for (int i = 0; i < GameState._weapons.size(); i ++)
-    {
-      if (i != _selected)
-      {
-        me = (MovementEngine)GameState._weapons.elementAt(i);
-        double x = Utils.getA(centerX, me.getX())/_scale;
-        double y = Utils.getB(centerY, me.getY())/_scale;
-        double track = Utils.track(x, y);
-        double range = getRange(x, y);
-        x = range * Math.cos(Math.toRadians(track));
-        y = range * Math.sin(Math.toRadians(track));
-        g.setColor(new Color(0,0,255));
-        g.drawString(me.getWeaponName(), (int)(250 + x) , (int)(250 - y - 10));
-        g.setColor(new Color(0,255,0));
-        g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
-      }
-    }
+	    //set center target
+	    MovementEngine me = GameState._weapons.elementAt(_selected);
+	    double centerX = (int)me.getX();
+	    double centerY = (int)me.getY();
+	
+	    //clear radar
+	    g.setColor(new Color(0,0,255));
+	    g.fillRect(0,0,500,500);
+	
+	    //draw center target (selected)
+	    //g.setColor(new Color(255,0,0));
+	    //g.fillRect(250,250,3,3);
+	    g.drawImage(GameUtils.getImageType(me.getCurrentDirection(), "player"), 232, 232, null);
+	
+	    //draw all other targets relative to center target, don't draw center target
+	    for (int i = 0; i < GameState._weapons.size(); i ++)
+	    {
+	    	if (i != _selected)
+	    	{	
+		        me = (MovementEngine)GameState._weapons.elementAt(i);
+		        double x = GameUtils.getA(centerX, me.getX())/_scale;
+		        double y = GameUtils.getB(centerY, me.getY())/_scale;
+		        double track = GameUtils.track(x, y);
+		        double range = getRange(x, y);
+		        x = range * Math.cos(Math.toRadians(track));
+		        //g.setColor(new Color(0,0,255));
+		        y = range * Math.sin(Math.toRadians(track));
+		        //g.drawString(me.getWeaponName(), (int)(250 + x) , (int)(250 - y - 10));
+		        //g.setColor(new Color(0,255,0));
+		        //g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
+		        if (me.getWeaponName().equals("enemy"))
+		        {
+		        	g.drawImage(GameUtils.getImageType(me.getCurrentDirection(), "enemy"),(int)(232 + x), (int)(232 - y), null);
+		        }
+		        else if(me.getWeaponName().equals("gun_enemy"))
+		        {
+		        	g.setColor(new Color(255,0,0));
+		            g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
+		        }
+		        else if(me.getWeaponName().equals("gun_player"))
+		        {
+		        	g.setColor(new Color(0,255,0));
+		            g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
+		        }
+		        else if(me.getWeaponName().equals("cloud"))
+		        {		        
+		        	g.drawImage(GameUtils.getImageType(me.getCurrentDirection(), "cloud"),(int)(232 + x), (int)(232 - y), null);
+		        }
+	    	}	
+	    }
   }
 
   public double getRange(double x, double y)
@@ -160,9 +183,9 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 		if (temp == 'e')
 		{	
 			//launch missile
-			double a = Utils.getA(GameState._weapons.get(0).getX(), _selectedTarget.getX());
-			double b = Utils.getB(GameState._weapons.get(0).getY(), _selectedTarget.getY());
-			double track = Utils.track(a, b);
+			double a = GameUtils.getA(GameState._weapons.get(0).getX(), _selectedTarget.getX());
+			double b = GameUtils.getB(GameState._weapons.get(0).getY(), _selectedTarget.getY());
+			double track = GameUtils.track(a, b);
 			MovementEngine missile = new FollowEngine((int)track, (int)track, (int)GameState._weapons.get(0).getX()
 					, (int)GameState._weapons.get(0).getY(), 1, 10, 1, 1, "missile", _selectedTarget,  GameState._weapons.get(0), 1000);  
 			GameState._weapons.add(missile);
@@ -171,9 +194,9 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 		if (temp == 'r')
 		{	
 			//fire gun
-			double a = Utils.getA(GameState._weapons.get(0).getX(), _selectedTarget.getX());
-			double b = Utils.getB(GameState._weapons.get(0).getY(), _selectedTarget.getY());
-			double track = Utils.track(a, b);
+			double a = GameUtils.getA(GameState._weapons.get(0).getX(), _selectedTarget.getX());
+			double b = GameUtils.getB(GameState._weapons.get(0).getY(), _selectedTarget.getY());
+			double track = GameUtils.track(a, b);
 			MovementEngine bullet = new LineEngine((int)track, (int)track, (int)GameState._weapons.get(0).getX()
 					, (int)GameState._weapons.get(0).getY(),25, 25, 1, 1, "gun", GameState._weapons.get(0), 500);  
 			GameState._weapons.add(bullet);
@@ -227,11 +250,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 		{
 			int x = e.getX() - 250;
 			int y = e.getY() - 250;
-			double x1 = Utils.getA(0, x);
-		    double y1 = Utils.getB(0, y);		  
-			int track = _degrev[(int)Utils.track(x1, y1)];		
+			double x1 = GameUtils.getA(0, x);
+		    double y1 = GameUtils.getB(0, y);		  
+			int track = _degrev[(int)GameUtils.track(x1, y1)];		
 			GameState._weapons.get(0).setDirection(track);	
-			System.out.println("desired direction: " + track);
+			//System.out.println("desired direction: " + track);
 		}
 	}
 	
@@ -239,7 +262,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 	{
 		x = x - 4;
 		y = y - 25;
-		System.out.println("---------" + x + " : " + y + "-----------");
+		//System.out.println("---------" + x + " : " + y + "-----------");
 		MovementEngine me = GameState._weapons.elementAt(_selected);
 		double centerX = (int)me.getX();
 		double centerY = (int)me.getY();
@@ -247,9 +270,9 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 		for(int i = 0; i < GameState._weapons.size(); i ++)
 		{
 			me = (MovementEngine)GameState._weapons.elementAt(i);
-	        double x1 = Utils.getA(centerX, me.getX())/_scale;
-	        double y1 = Utils.getB(centerY, me.getY())/_scale;
-	        double track = Utils.track(x1, y1);
+	        double x1 = GameUtils.getA(centerX, me.getX())/_scale;
+	        double y1 = GameUtils.getB(centerY, me.getY())/_scale;
+	        double track = GameUtils.track(x1, y1);
 	        double range = getRange(x1, y1);
 	        x1 = range * Math.cos(Math.toRadians(track));
 	        y1 = range * Math.sin(Math.toRadians(track));
@@ -258,11 +281,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 	        int targetY = (int)(250 - y1);
 	        if (isTargetSelected(x, y, targetX, targetY))
 	        {
-	        	System.out.println("--------------------");
+	        	//System.out.println("--------------------");
 	        	return me;	        		        
 	        }
 		}
-		System.out.println("--------------------");
+		//System.out.println("--------------------");
 		return null;		
 	}
 	
@@ -277,6 +300,36 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener
 		else
 		{
 			return false;
+		}
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		System.out.println(e.getX() + ":" + e.getY());
+		
+		// TODO Auto-generated method stub
+		MovementEngine target = findTarget(e.getX(), e.getY());
+		if (target != null)
+		{
+			System.out.println("target selected: " + target.getWeaponName());
+			_selectedTarget = target;
+		}
+		else
+		{
+			int x = e.getX() - 250;
+			int y = e.getY() - 250;
+			double x1 = GameUtils.getA(0, x);
+		    double y1 = GameUtils.getB(0, y);		  
+			int track = _degrev[(int)GameUtils.track(x1, y1)];		
+			GameState._weapons.get(0).setDirection(track);	
+			//System.out.println("desired direction: " + track);
 		}
 	}
 }

@@ -2,10 +2,12 @@ package us.ttyl.starship.env;
 
 import us.ttyl.starship.core.GameState;
 import us.ttyl.starship.movement.CircleEngine;
+import us.ttyl.starship.movement.LineEngine;
+import us.ttyl.starship.movement.MovementEngine;
 
 public class EnvBuilder 
 {
-	public void generatePlanet(double planetX, double planetY, boolean sun, int turnmode)
+	private static void generateShip(double planetX, double planetY, int turnmode, int speed)
 	{
 		/*
 			 public CircleEngine(
@@ -21,45 +23,47 @@ public class EnvBuilder
 						int endurance)
 					   {
 		*/
-			
-		if (sun == true)
-		{
-			GameState._weapons.add(new CircleEngine(0, 0, planetX, planetY, 0
-				, 0, 0, 0, ("sun " + planetX + ":" + planetY),-1));
-		}
-		else
-		{
-			GameState._weapons.add(new CircleEngine(0, 0, planetX, planetY, 1
-				, 1, 1, turnmode, ("planet " + planetX + ":" + planetY),-1));
-		}
+		GameState._weapons.add(new CircleEngine(0, 0, planetX, planetY, 1
+				, 1, 1, turnmode, ("enemy"),-1));		
 	}
 	
-	public void generateSystems(double systemX, double systemY)
+	public static void generateEnemy(double playerPositionX, double playerPositionY)
 	{
-		// the sun
-		generatePlanet(systemX, systemX, true, 0);
-		
-		// the planets
-		/*
-		int planetCount = 3;
-		for(int i = 1; i < planetCount; i ++)
+		// the enemy
+		int offsetX = 300; 
+		int offsetY = 300;
+		if ((int)(Math.random() * 100) < 50)
 		{
-			double planetX = systemX;
-			double planetY = systemY - (20 * i);
-			int turnmode = i; 
-			generatePlanet(planetX, planetY, false, turnmode);
+			offsetX = offsetX * -1;
+			offsetX = offsetY * -1;
 		}
-		*/
-		
-		//sun
-		GameState._weapons.add(new CircleEngine(0, 0, 100, 100, 0
-				, 0, 0, 0, ("sun " + 100 + ":" + 100),-1));
-		
-		// planet
-		GameState._weapons.add(new CircleEngine(0, 0, 60, -172, 1
-				, 1, 1, 1, ("planet " + 100 + ":" + -172),-1));
-		
-		GameState._weapons.add(new CircleEngine(0, 0, 80, 114, 1
-				, 1, 1, 2, ( "planet " + 80 + ":" + -114),-1));
+		generateShip(playerPositionX + offsetX, playerPositionY + offsetY, 0, 10);
+	}
+	
+	public static void generateCloud(double playerPositionX, double playerPositionY, int playerTrack)
+	{
+		/*
+		int direction, 
+	  	int currentDirection, 
+	  	double currentX, 
+	  	double currentY, 
+	  	double currentSpeed, 
+	  	double maxSpeed, 
+	  	double acceleration, 
+	  	int turnMode, 
+	  	String name,
+	  	MovementEngine origin, 
+	  	int endurance)
+	  	*/
+		// the cloud
+		double offsetX = 250;		
+		double offsetY = (playerPositionY - 250) + (int)(Math.random() * 500);
+		if (playerTrack > 180 && playerTrack < 359)
+		{
+			offsetX = -250;
+		}
+		GameState._weapons.add(new LineEngine(180, 180, offsetX + playerPositionX
+				, offsetY+playerPositionY, 1d
+				, .1d, .1d, 0, "cloud", null, -1));	
 	}
 }

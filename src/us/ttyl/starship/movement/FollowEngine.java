@@ -1,7 +1,7 @@
 package us.ttyl.starship.movement;
 
 import us.ttyl.starship.core.GameState;
-import us.ttyl.starship.core.Utils;
+import us.ttyl.starship.core.GameUtils;
 
 /**
  * 
@@ -69,9 +69,9 @@ public class FollowEngine extends MovementEngine
   public void updateDirection()
   {
     //get direction
-    double a = Utils.getA(_currentX, _target.getX());
-    double b = Utils.getB(_currentY, _target.getY());
-    _direction = ((int)Utils.track(a, b));
+    double a = GameUtils.getA(_currentX, _target.getX());
+    double b = GameUtils.getB(_currentY, _target.getY());
+    _direction = ((int)GameUtils.track(a, b));
 
     //update direction as per movement rules
     int leftCount = 0;
