@@ -29,15 +29,15 @@ public class EnvBuilder
 	
 	public static void generateEnemy(double playerPositionX, double playerPositionY)
 	{
-		// the enemy
-		int offsetX = 300; 
-		int offsetY = 300;
-		if ((int)(Math.random() * 100) < 50)
-		{
-			offsetX = offsetX * -1;
-			offsetX = offsetY * -1;
-		}
-		generateShip(playerPositionX + offsetX, playerPositionY + offsetY, 0, 10);
+		// the enemies
+		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY - 350, 0, 10);
+		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY + 350, 0, 10);
+		generateShip(playerPositionX - 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
+		generateShip(playerPositionX + 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
+		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY - 350, 0, 10);
+		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY + 350, 0, 10);
+		generateShip(playerPositionX - 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
+		generateShip(playerPositionX + 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
 	}
 	
 	public static void generateCloud(double playerPositionX, double playerPositionY, int playerTrack)
@@ -55,15 +55,34 @@ public class EnvBuilder
 	  	MovementEngine origin, 
 	  	int endurance)
 	  	*/
-		// the cloud
-		double offsetX = 250;		
-		double offsetY = (playerPositionY - 250) + (int)(Math.random() * 500);
-		if (playerTrack > 180 && playerTrack < 359)
-		{
-			offsetX = -250;
-		}
-		GameState._weapons.add(new LineEngine(180, 180, offsetX + playerPositionX
-				, offsetY+playerPositionY, 1d
-				, .1d, .1d, 0, "cloud", null, -1));	
+		
+		// the cloud up
+		GameState._weapons.add(new LineEngine(180, 180, playerPositionX - 500 + (int)(Math.random() * 500)
+				,  playerPositionY - 350, 1d
+				, 1d, 0, 0, "cloud", null, -1));	
+		GameState._weapons.add(new LineEngine(0, 0, playerPositionX - 500 + (int)(Math.random() * 500)
+				,  playerPositionY - 350, .5d
+				, .5d, 0, 0, "cloud", null, -1));	
+		// the cloud down
+		GameState._weapons.add(new LineEngine(180, 180, playerPositionX - 500 + (int)(Math.random() * 500)
+				, playerPositionY + 350, .2d
+				, .2d, 0, 0, "cloud", null, -1));	
+		GameState._weapons.add(new LineEngine(0, 0, playerPositionX - 500 + (int)(Math.random() * 500)
+				, playerPositionY + 350, .3d
+				, .3d, 0, 0, "cloud", null, -1));	
+		// clound left
+		GameState._weapons.add(new LineEngine(180, 180, playerPositionX - 350
+				, playerPositionY - 500 + (int)(Math.random() * 500) , .1d
+				, .1d, 0, 0, "cloud", null, -1));
+		GameState._weapons.add(new LineEngine(0, 0, playerPositionX - 350
+				, playerPositionY - 500 + (int)(Math.random() * 500) , 1d
+				, 1d, 0, 0, "cloud", null, -1));	
+		//cloud right
+		GameState._weapons.add(new LineEngine(180, 180, playerPositionX + 350
+				, playerPositionY - 500 + (int)(Math.random() * 500), .3d
+				, .3d, 0, 0, "cloud", null, -1));	
+		GameState._weapons.add(new LineEngine(0, 0, playerPositionX + 350
+				, playerPositionY - 500 + (int)(Math.random() * 500), .1d
+				, .1d, 0, 0, "cloud", null, -1));	
 	}
 }

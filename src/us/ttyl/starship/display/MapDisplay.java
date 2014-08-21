@@ -4,7 +4,8 @@
 
 package us.ttyl.starship.display;
 
-import java.awt.Color;import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -160,11 +161,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void keyPressed(KeyEvent arg0)
 	{
-		System.out.println("keycode pressed: " + arg0.getKeyCode());
+		//System.out.println("keycode pressed: " + arg0.getKeyCode());
 		char temp = arg0.getKeyChar();	
 		if (temp == 'w')
 		{		
-			System.out.println("speed up: " + arg0.getKeyCode());
+			//System.out.println("speed up: " + arg0.getKeyCode());
 			GameState.mIsThrottlePressed = true;
 		}
 	}
@@ -172,11 +173,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void keyReleased(KeyEvent arg0)
 	{
-		System.out.println("keycode released: " + arg0.getKeyCode());
+		//System.out.println("keycode released: " + arg0.getKeyCode());
 		char temp = arg0.getKeyChar();		
 		if (temp == 'w')
 		{	
-			System.out.println("slow down: " + arg0.getKeyCode());
+			//System.out.println("slow down: " + arg0.getKeyCode());
 			GameState.mIsThrottlePressed = false;
 		}
 		
@@ -243,7 +244,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		MovementEngine target = findTarget(e.getX(), e.getY());
 		if (target != null)
 		{
-			System.out.println("target selected: " + target.getWeaponName());
+			//System.out.println("target selected: " + target.getWeaponName());
 			_selectedTarget = target;
 		}
 		else
@@ -276,7 +277,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	        double range = getRange(x1, y1);
 	        x1 = range * Math.cos(Math.toRadians(track));
 	        y1 = range * Math.sin(Math.toRadians(track));
-	        System.out.println("potentialTarget:" +me.getWeaponName() + ":" + (int)(250 + x1) + ":" + (int)(250 - y1));
+	        //System.out.println("potentialTarget:" +me.getWeaponName() + ":" + (int)(250 + x1) + ":" + (int)(250 - y1));
 	        int targetX = (int)(250 + x1);
 	        int targetY = (int)(250 - y1);
 	        if (isTargetSelected(x, y, targetX, targetY))
@@ -312,13 +313,13 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void mouseMoved(MouseEvent e) 
 	{
-		System.out.println(e.getX() + ":" + e.getY());
+		//System.out.println(e.getX() + ":" + e.getY());
 		
 		// TODO Auto-generated method stub
 		MovementEngine target = findTarget(e.getX(), e.getY());
 		if (target != null)
 		{
-			System.out.println("target selected: " + target.getWeaponName());
+			//System.out.println("target selected: " + target.getWeaponName());
 			_selectedTarget = target;
 		}
 		else

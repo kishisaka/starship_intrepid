@@ -78,7 +78,8 @@ public class LineEngine extends MovementEngine
 					int diffY = Math.abs((int)(_currentY - ship.getY())); 
 					if (diffX < 10 && diffY < 10)
 					{
-						System.out.println("collision " + _name + ":" + ship.getWeaponName());
+						//System.out.println("collision " + _name + ":" + ship.getWeaponName());
+						GameState._audioPlayerEnemyDeath.play();
 						_endurance = 0;
 						ship.setDestroyedFlag(true);
 						break;
@@ -93,7 +94,7 @@ public class LineEngine extends MovementEngine
 	{
 		if (_endurance > 0)
 		{
-			System.out.println("endurance_check for " + _name + ":" + _endurance);
+			//System.out.println("endurance_check for " + _name + ":" + _endurance);
 			_endurance = _endurance - 1;
 		}
 	}

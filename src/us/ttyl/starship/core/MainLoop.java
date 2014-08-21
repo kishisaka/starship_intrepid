@@ -45,7 +45,7 @@ public class MainLoop extends Thread
 		    	
 		    	//generate a new ship. 	
 		    	int enemyCount = GameUtils.getTypeCount("enemy"); 
-		    	System.out.println("enemyCount: " + enemyCount);
+		    	//System.out.println("enemyCount: " + enemyCount);
 				if (currentTime - startTime > 300 && enemyCount < 20)
 				{
 					startTime = currentTime;
@@ -59,7 +59,7 @@ public class MainLoop extends Thread
 				{
 					for(int i = 0; i < GameState._weapons.size(); i ++)
 					{
-						if ((int)(Math.random() * 100) > 80)
+						if ((int)(Math.random() * 100) > 90)
 						{
 							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
 							{
@@ -72,12 +72,13 @@ public class MainLoop extends Thread
 										, (int)GameState._weapons.get(i).getX()
 										, (int)GameState._weapons.get(i).getY(),3, 3, 1, 1, "gun_enemy", GameState._weapons.get(0), 200);  
 								GameState._weapons.add(bullet);
+								GameState._audioPlayerEnemyShot.play();
 							}
 						}
 					}
 				}
 				
-				// fire gun constantly	
+				// fire gun constantly
 				long currentTimeGun = currentTime;
 				if (currentTimeGun - startTimeGun > 100)
 				{
@@ -86,12 +87,14 @@ public class MainLoop extends Thread
 							, (int)GameState._weapons.get(0).getX()
 							, (int)GameState._weapons.get(0).getY(),13, 13, 1, 1, "gun_player", GameState._weapons.get(0), 200);  
 					GameState._weapons.add(bullet);
+					GameState._audioPlayerShot.play();
 				}
 				
 				//create clouds 
 				long currentTimeClouds = currentTime;
 				if (currentTimeClouds - startTimeClouds > 1000)
 				{
+					System.out.println("make_cloud: " + (currentTimeClouds - startTimeClouds));
 					startTimeClouds = currentTimeClouds;
 					EnvBuilder.generateCloud(GameState._weapons.get(0).getX(), GameState._weapons.get(0).getY(), GameState._weapons.get(0).getCurrentDirection());
 				}

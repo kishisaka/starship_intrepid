@@ -149,7 +149,7 @@ public class FollowEngine extends MovementEngine
 				int diffY = Math.abs((int)(_currentY - ship.getY())); 
 				if (diffX < 10 && diffY < 10)
 				{
-					System.out.println("collision " + _name + ":" + ship.getWeaponName());
+					//System.out.println("collision " + _name + ":" + ship.getWeaponName());
 					_endurance = 0;
 					break;
 				}
