@@ -74,12 +74,6 @@ public class CircleEngine extends MovementEngine
   			_currentTurnMode = _currentTurnMode + _currentSpeed;
   		}
   	}
-
-	@Override
-	public void updateCollision() 
-	{
-		// TODO Auto-generated method stub		
-	}
 	
 	@Override
 	public void updateFuelUsage() 

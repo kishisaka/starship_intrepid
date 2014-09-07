@@ -20,4 +20,13 @@ public class GameState
 	public static AudioPlayer _audioPlayerShot;
 	public static AudioPlayer _audioPlayerEnemyShot;
 	public static AudioPlayer _audioPlayerEnemyDeath;
+	public static AudioPlayer _audioPlayerMissile;
+	
+	//player score
+	public static int _playerScore = 0;
+	public static int _playerBulletsShot = 0;
+	public static int _playerEnemyShot = 0;
+	
+	//sound settings
+	public static boolean _muted = false;
 }

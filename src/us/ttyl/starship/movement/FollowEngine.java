@@ -5,7 +5,7 @@ import us.ttyl.starship.core.GameUtils;
 
 /**
  * 
- * @author test
+ * @author kurt ishisaka
  * used for missiles
  */
 public class FollowEngine extends MovementEngine
@@ -135,27 +135,6 @@ public class FollowEngine extends MovementEngine
       }
     }
   }
-
-	@Override
-	public void updateCollision()
-	{					
-		for(int i = 0; i < GameState._weapons.size(); i ++)
-		{			
-			MovementEngine ship = GameState._weapons.get(i);
-			if (_origin.getWeaponName().equals(ship.getWeaponName()) == false 
-					&& _name.equals(ship.getWeaponName()) == false)
-			{						
-				int diffX = Math.abs((int)(_currentX - ship.getX())); 
-				int diffY = Math.abs((int)(_currentY - ship.getY())); 
-				if (diffX < 10 && diffY < 10)
-				{
-					//System.out.println("collision " + _name + ":" + ship.getWeaponName());
-					_endurance = 0;
-					break;
-				}
-			}
-		}
-	}
 	
 	@Override
 	public void updateFuelUsage() 

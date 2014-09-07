@@ -38,14 +38,14 @@ public class MainLoop extends Thread
 		    	}
 				
 		    	for(int i = 0; i < GameState._weapons.size(); i ++)
-		    	{
+		    	{		    		
 		    		MovementEngine ship = GameState._weapons.get(i);
-		    		ship.run();
+		    		ship.run();		    		
+		    		checkCollisions(ship);
 		    	}
 		    	
 		    	//generate a new ship. 	
 		    	int enemyCount = GameUtils.getTypeCount("enemy"); 
-		    	//System.out.println("enemyCount: " + enemyCount);
 				if (currentTime - startTime > 300 && enemyCount < 20)
 				{
 					startTime = currentTime;
@@ -72,7 +72,10 @@ public class MainLoop extends Thread
 										, (int)GameState._weapons.get(i).getX()
 										, (int)GameState._weapons.get(i).getY(),3, 3, 1, 1, "gun_enemy", GameState._weapons.get(0), 200);  
 								GameState._weapons.add(bullet);
-								GameState._audioPlayerEnemyShot.play();
+								if (GameState._muted == false)
+								{
+									GameState._audioPlayerEnemyShot.play();
+								}
 							}
 						}
 					}
@@ -87,7 +90,10 @@ public class MainLoop extends Thread
 							, (int)GameState._weapons.get(0).getX()
 							, (int)GameState._weapons.get(0).getY(),13, 13, 1, 1, "gun_player", GameState._weapons.get(0), 200);  
 					GameState._weapons.add(bullet);
-					GameState._audioPlayerShot.play();
+					if (GameState._muted == false)
+					{
+						GameState._audioPlayerShot.play();
+					}
 				}
 				
 				//create clouds 
@@ -107,6 +113,73 @@ public class MainLoop extends Thread
 			}
 		}
 	}       
+	
+	/**
+	 * check for collisions between ships, bullets, etc
+	 * @param currentShip
+	 */
+	private void checkCollisions(MovementEngine currentShip)
+	{			
+		//ignore clouds and explosions
+		if (currentShip.getWeaponName().equals("explosion_particle") == false 
+				&& currentShip.getWeaponName().equals("cloud") == false)
+		{
+			for(int i = 0; i < GameState._weapons.size(); i ++)
+			{		
+				MovementEngine ship = GameState._weapons.get(i);
+				
+				if (currentShip.getOrigin() != null)
+				{							
+					// ignore clouds and explosions
+					if (ship.getWeaponName().equals("explosion_particle") == false 
+							&& ship.getWeaponName().equals("missile") == false
+							&& ship.getWeaponName().equals(currentShip.getOrigin().getWeaponName()) == false
+							&& ship.getWeaponName().equals("gun_player") == false
+							&& ship.getWeaponName().equals("cloud") == false)
+					{
+						if (currentShip.getOrigin().getWeaponName().equals(ship.getWeaponName()) == false 
+								&& currentShip.getWeaponName().equals(ship.getWeaponName()) == false
+								&& currentShip.getWeaponName().indexOf(ship.getWeaponName()) == -1)									
+						{						
+							int diffX = Math.abs((int)(currentShip.getX() - ship.getX())); 
+							int diffY = Math.abs((int)(currentShip.getY() - ship.getY())); 
+							if (diffX < 10 && diffY < 10)
+							{
+								if (GameState._muted == false)
+								{
+									GameState._audioPlayerEnemyDeath.play();
+								}
+								if (ship.getWeaponName().equals("enemy"))
+								{
+									GameState._playerScore = GameState._playerScore + 2;
+									GameState._playerEnemyShot = GameState._playerEnemyShot + 1;
+									
+									// create particle explosion for shot down aircraft (15 particles)
+									for(int particleCount = 0; particleCount < 83; particleCount ++)
+									{
+										int particleDirection = (int)(Math.random() * 360);
+										int particleSpeed = (int)(Math.random() * 10);
+										int particleEndurance = (int)(Math.random() * 50);
+										MovementEngine explosionParticle = new LineEngine(particleDirection, particleDirection
+												, ship.getX(), ship.getY(), particleSpeed, 1, 1, 1, "explosion_particle", GameState._weapons.get(0), particleEndurance); 
+										GameState._weapons.add(explosionParticle);
+									}
+								}
+								if (ship.getWeaponName().equals("gun_enemy"))
+								{
+									GameState._playerScore = GameState._playerScore + 1;
+									GameState._playerBulletsShot = GameState._playerBulletsShot + 1;
+								}
+								currentShip.setEndurance(0);
+								ship.setDestroyedFlag(true);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	public void initGame()
 	{

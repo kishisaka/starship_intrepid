@@ -42,12 +42,6 @@ public class PlanetEngine extends MovementEngine
 	}
 
 	@Override
-	public void updateCollision()
-	{
-		// TODO Auto-generated method stub	
-	}
-
-	@Override
 	public void updateFuelUsage()
 	{
 		// TODO Auto-generated method stub

@@ -29,8 +29,9 @@ public class Game extends Thread
 	{		
 		GameState._sprites = GameUtils.getTilesFromFile();
 		GameState._audioPlayerShot = new AudioPlayer("./sounds/gun2.wav");
-		GameState._audioPlayerEnemyShot = new AudioPlayer("./sounds/enemy_gun.wav");
+		GameState._audioPlayerEnemyShot = new AudioPlayer("./sounds/trek1.wav");
 		GameState._audioPlayerEnemyDeath = new AudioPlayer("./sounds/enemy_death.wav");
+		GameState._audioPlayerMissile = new AudioPlayer("./sounds/trek2.wav");
 		MovementEngine player = new FreeEngine(0, 0, 0d, 0d, 2d, 2d, 5, .1d, 0, "player", -1); 
 		GameState._weapons.add(player);		 			
 	}

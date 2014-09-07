@@ -2,7 +2,7 @@ package us.ttyl.starship.movement;
 
 /**
  * all engines extend this and override the movement methods. 
- * @author test
+ * @author kurt ishisaka
  *
  */
 public abstract class MovementEngine
@@ -27,7 +27,6 @@ public abstract class MovementEngine
   public abstract void updateSpeedDecrease();
   public abstract void updateDirection();
   public abstract void updateDisplacement();
-  public abstract void updateCollision();
   public abstract void updateFuelUsage();
   public abstract void doOther();
   
@@ -114,7 +113,6 @@ public abstract class MovementEngine
 		  updateSpeed();
 		  updateDirection();
 		  updateDisplacement();
-		  updateCollision();
 		  updateFuelUsage();
 		  checkDestroyed();
       }
@@ -139,6 +137,16 @@ public abstract class MovementEngine
 
   public double getTurnMode()
   {
-    return _turnMode;
+    return _turnMode;    
+  }
+  
+  public MovementEngine getOrigin()
+  {
+	  return _origin;
+  }
+  
+  public void setEndurance(int endurance)
+  {
+	 _endurance = 0;
   }
 }

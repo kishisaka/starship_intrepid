@@ -13,6 +13,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -117,12 +119,25 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		        	g.setColor(new Color(0,255,0));
 		            g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
 		        }
+		        else if(me.getWeaponName().equals("missile"))
+		        {
+		        	g.setColor(new Color(0,0,0));
+		            g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
+		        }
 		        else if(me.getWeaponName().equals("cloud"))
 		        {		        
 		        	g.drawImage(GameUtils.getImageType(me.getCurrentDirection(), "cloud"),(int)(232 + x), (int)(232 - y), null);
 		        }
+		        else if(me.getWeaponName().equals("explosion_particle"))
+		        {		        
+		        	g.setColor(new Color(115,134,230));
+		            g.fillRect((int)(250 + x), (int)(250 - y), 3, 3);
+		        }
 	    	}	
 	    }
+	    g.drawString("score: " + GameState._playerScore, (int)(50) , (int)(450));
+	    g.drawString("bullet: " + GameState._playerBulletsShot, (int)(150) , (int)(450));
+	    g.drawString("enemy: " + GameState._playerEnemyShot, (int)(250) , (int)(450));
   }
 
   public double getRange(double x, double y)
@@ -161,11 +176,9 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void keyPressed(KeyEvent arg0)
 	{
-		//System.out.println("keycode pressed: " + arg0.getKeyCode());
 		char temp = arg0.getKeyChar();	
 		if (temp == 'w')
 		{		
-			//System.out.println("speed up: " + arg0.getKeyCode());
 			GameState.mIsThrottlePressed = true;
 		}
 	}
@@ -173,23 +186,53 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void keyReleased(KeyEvent arg0)
 	{
-		//System.out.println("keycode released: " + arg0.getKeyCode());
 		char temp = arg0.getKeyChar();		
 		if (temp == 'w')
 		{	
-			//System.out.println("slow down: " + arg0.getKeyCode());
 			GameState.mIsThrottlePressed = false;
 		}
 		
 		if (temp == 'e')
 		{	
-			//launch missile
-			double a = GameUtils.getA(GameState._weapons.get(0).getX(), _selectedTarget.getX());
-			double b = GameUtils.getB(GameState._weapons.get(0).getY(), _selectedTarget.getY());
-			double track = GameUtils.track(a, b);
-			MovementEngine missile = new FollowEngine((int)track, (int)track, (int)GameState._weapons.get(0).getX()
-					, (int)GameState._weapons.get(0).getY(), 1, 10, 1, 1, "missile", _selectedTarget,  GameState._weapons.get(0), 1000);  
-			GameState._weapons.add(missile);
+			//launch missiles (3)
+			
+			// find closest target			
+			Set <Integer> missleSet = new HashSet<Integer>();
+			for(int j = 0; j < 1; j ++)
+			{
+				MovementEngine closestTarget = null;
+				int closestTargetRange = 99999999;
+				
+				// select a target from weapon list
+				for(int i = 1; i < GameState._weapons.size(); i ++)
+				{
+					MovementEngine currentShip = GameState._weapons.get(i);
+					if (currentShip.getWeaponName().equals("enemy") && missleSet.contains(currentShip.hashCode()) == false)
+					{
+						int currentRange = GameUtils.getRange(GameState._weapons.get(0), currentShip);
+						System.out.println("currentRange: "+ currentRange);
+						if (currentRange < closestTargetRange)
+						{
+							closestTarget = currentShip;
+							closestTargetRange = currentRange;
+							missleSet.add(closestTarget.hashCode());
+						}
+					}
+				}
+				// once the closest target is selected, launch the missile. 
+				if (closestTarget != null)
+				{					
+					MovementEngine missile = new FollowEngine((int)GameState._weapons.get(0).getCurrentDirection()
+							, (int)GameState._weapons.get(0).getCurrentDirection()
+							, (int)GameState._weapons.get(0).getX(), (int)GameState._weapons.get(0).getY(), .01, 10, .1, 1
+							, "missile", closestTarget,  GameState._weapons.get(0), 1000);  
+					GameState._weapons.add(missile);
+					if (GameState._muted == false)
+					{
+						GameState._audioPlayerMissile.play();
+					}
+				}
+			}
 		}
 		
 		if (temp == 'r')
@@ -244,7 +287,6 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		MovementEngine target = findTarget(e.getX(), e.getY());
 		if (target != null)
 		{
-			//System.out.println("target selected: " + target.getWeaponName());
 			_selectedTarget = target;
 		}
 		else
@@ -263,7 +305,6 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	{
 		x = x - 4;
 		y = y - 25;
-		//System.out.println("---------" + x + " : " + y + "-----------");
 		MovementEngine me = GameState._weapons.elementAt(_selected);
 		double centerX = (int)me.getX();
 		double centerY = (int)me.getY();
@@ -277,16 +318,13 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	        double range = getRange(x1, y1);
 	        x1 = range * Math.cos(Math.toRadians(track));
 	        y1 = range * Math.sin(Math.toRadians(track));
-	        //System.out.println("potentialTarget:" +me.getWeaponName() + ":" + (int)(250 + x1) + ":" + (int)(250 - y1));
 	        int targetX = (int)(250 + x1);
 	        int targetY = (int)(250 - y1);
 	        if (isTargetSelected(x, y, targetX, targetY))
 	        {
-	        	//System.out.println("--------------------");
 	        	return me;	        		        
 	        }
 		}
-		//System.out.println("--------------------");
 		return null;		
 	}
 	
@@ -313,13 +351,10 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void mouseMoved(MouseEvent e) 
 	{
-		//System.out.println(e.getX() + ":" + e.getY());
-		
 		// TODO Auto-generated method stub
 		MovementEngine target = findTarget(e.getX(), e.getY());
 		if (target != null)
 		{
-			//System.out.println("target selected: " + target.getWeaponName());
 			_selectedTarget = target;
 		}
 		else
@@ -330,7 +365,6 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		    double y1 = GameUtils.getB(0, y);		  
 			int track = _degrev[(int)GameUtils.track(x1, y1)];		
 			GameState._weapons.get(0).setDirection(track);	
-			//System.out.println("desired direction: " + track);
 		}
 	}
 }

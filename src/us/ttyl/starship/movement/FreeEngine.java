@@ -6,12 +6,12 @@ package us.ttyl.starship.movement;
 
 /**
  * the player's engine
- * @author test
+ * @author kurt ishisaka
  *
  */
 public class FreeEngine extends MovementEngine
 {
-  public FreeEngine(
+	public FreeEngine(
 		  int direction
 		  , int currentDirection
 		  , double currentX
@@ -24,46 +24,46 @@ public class FreeEngine extends MovementEngine
 		  , String name
 		  , int endurance
 		  )
-  {
-    _name = name;
-    _direction = direction;
-    _currentDirection = currentDirection;
-    _currentSpeed = currentSpeed;
-    _maxSpeed = maxSpeed;
-    _acceleration = acceleration;
-    _currentX = currentX;
-    _currentY = currentY;
-    _destroyed = false;
-    _turnMode = turnMode;
-	_endurance = endurance;
-	_desiredSpeed = desiredSpeed;
-  }
+	{
+	    _name = name;
+	    _direction = direction;
+	    _currentDirection = currentDirection;
+	    _currentSpeed = currentSpeed;
+	    _maxSpeed = maxSpeed;
+	    _acceleration = acceleration;
+	    _currentX = currentX;
+	    _currentY = currentY;
+	    _destroyed = false;
+	    _turnMode = turnMode;
+		_endurance = endurance;
+		_desiredSpeed = desiredSpeed;
+	}
 
-  public void doOther()
-  {
-  }
+	public void doOther()
+	{
+	}
 
-  public void updateDisplacement()
-  {
-    // pre-generate cos and sin later
-    if (_currentSpeed > 0)
-    {
-    	double xDisplacement = (Math.cos(Math.toRadians(_currentDirection)) *_currentSpeed);
-    	double yDisplacement = (Math.sin(Math.toRadians(_currentDirection)) *_currentSpeed);
-    	_currentX = _currentX + xDisplacement;
-    	_currentY = _currentY + yDisplacement;
-    }
-  }
+	public void updateDisplacement()
+	{
+		// pre-generate cos and sin later
+	    if (_currentSpeed > 0)
+	    {
+	    	double xDisplacement = (Math.cos(Math.toRadians(_currentDirection)) *_currentSpeed);
+	    	double yDisplacement = (Math.sin(Math.toRadians(_currentDirection)) *_currentSpeed);
+	    	_currentX = _currentX + xDisplacement;
+	    	_currentY = _currentY + yDisplacement;
+	    }
+	}
 
-  @Override
-  public void updateSpeedIncrease()
-  {  
-	  _currentSpeed = _currentSpeed + _acceleration;
-	  if (_currentSpeed > _maxSpeed)
-	  {
-		  _currentSpeed = _maxSpeed;
-	  }
-  }
+	@Override
+	public void updateSpeedIncrease()
+	{  
+		  _currentSpeed = _currentSpeed + _acceleration;
+		  if (_currentSpeed > _maxSpeed)
+		  {
+			  _currentSpeed = _maxSpeed;
+		  }
+	}
   
   	@Override
   	public void updateSpeedDecrease() 
@@ -82,16 +82,9 @@ public class FreeEngine extends MovementEngine
 	}
 	
   	  
-  public void updateDirection()
-  {
-	  _currentDirection = _direction;
-  }
-
-	@Override
-	public void updateCollision() 
+	public void updateDirection()
 	{
-		// TODO Auto-generated method stub
-		
+		_currentDirection = _direction;
 	}
 	
 	@Override
@@ -103,71 +96,69 @@ public class FreeEngine extends MovementEngine
 
 	
   
-  /*
-  public void updateDirection()
-  {
-    int leftCount = 0;
-    double directionRequested = _direction;
-    double currentDirection = _currentDirection;
-    while (currentDirection != directionRequested)
-    {
-      leftCount ++;
-      currentDirection --;
-      if (currentDirection < 0)
-      {
-        currentDirection = 359;
-      }
-
-    }
-
-    int rightCount = 0;
-    currentDirection = _currentDirection;
-    while (currentDirection != directionRequested)
-    {
-      rightCount ++;
-      currentDirection ++;
-      if (currentDirection > 359)
-      {
-        currentDirection = 0;
-      }
-
-    }
-    if (leftCount < rightCount)
-    {
-      for (int i = 0; i < _turnMode; i ++)
-      {
-        if (_currentDirection == _direction)
-        {
-          break;
-        }
-        else
-        {
-          _currentDirection ++;
-        }
-        if (_currentDirection > 359)
-        {
-          _currentDirection = 0;
-        }
-      }
-    }
-    else
-    {
-      for (int i = 0; i < _turnMode; i ++)
-      {
-        if (_currentDirection == _direction)
-        {
-          break;
-        }
-        else
-        {
-          _currentDirection --;
-        }
-        if (_currentDirection < 0)
-        {
-          _currentDirection = 359;
-        }
-      }
-    }
-  }
-  */
+	/*
+	public void updateDirection()
+	{
+	    int leftCount = 0;
+	    double directionRequested = _direction;
+	    double currentDirection = _currentDirection;
+	    while (currentDirection != directionRequested)
+	    {
+	      	leftCount ++;
+	      	currentDirection --;
+	      	if (currentDirection < 0)
+	      	{
+	        	currentDirection = 359;
+	      	}	
+	    }
+	
+	    int rightCount = 0;
+	    currentDirection = _currentDirection;
+	    while (currentDirection != directionRequested)
+	    {
+	      	rightCount ++;
+	      	currentDirection ++;
+	      	if (currentDirection > 359)
+	      	{
+	        	currentDirection = 0;
+	      	}
+	    }
+	    if (leftCount < rightCount)
+	    {
+	      for (int i = 0; i < _turnMode; i ++)
+	      {
+	        if (_currentDirection == _direction)
+	        {
+	          break;
+	        }
+	        else
+	        {
+	          _currentDirection ++;
+	        }
+	        if (_currentDirection > 359)
+	        {
+	          _currentDirection = 0;
+	        }
+	      }
+	    }
+	    else
+	    {
+	      for (int i = 0; i < _turnMode; i ++)
+	      {
+	        if (_currentDirection == _direction)
+	        {
+	          break;
+	        }
+	        else
+	        {
+	          _currentDirection --;
+	        }
+	        if (_currentDirection < 0)
+	        {
+	          _currentDirection = 359;
+	        }
+	      }
+	    }
+	  }
+	  */
 }

@@ -19,7 +19,6 @@ import us.ttyl.starship.movement.MovementEngine;
 
 public class MovementDisplay extends Frame
 {
-
   private static final long serialVersionUID = 1L;
   Hashtable <String,Component> _devices = new Hashtable<String,Component>();
   MapDisplay _md;
@@ -106,14 +105,16 @@ public class MovementDisplay extends Frame
     _md = md;
   }
 
-  public void makeLabel(String label, GridBagLayout gridbag, GridBagConstraints c)
+  public void makeLabel(String label
+		  , GridBagLayout gridbag, GridBagConstraints c)
   {
     Label l = new Label(label);
     gridbag.setConstraints(l, c);
     add(l);
   }
 
-  public void makeTextBox(int columns, int rows, GridBagLayout gridbag, GridBagConstraints c, String name)
+  public void makeTextBox(int columns, int rows
+		  , GridBagLayout gridbag, GridBagConstraints c, String name)
   {
     TextArea area = new TextArea(columns, rows);
     gridbag.setConstraints(area, c);
@@ -121,7 +122,8 @@ public class MovementDisplay extends Frame
     _devices.put(name, area);
   }
 
-  public void makeTextLine(int columns, GridBagLayout gridbag, GridBagConstraints c, String name)
+  public void makeTextLine(int columns, GridBagLayout gridbag
+		  , GridBagConstraints c, String name)
   {
     TextField field = new TextField(columns);
     gridbag.setConstraints(field, c);
@@ -144,7 +146,9 @@ public class MovementDisplay extends Frame
     for (int i = 0; i < GameState._weapons.size(); i ++)
     {
       MovementEngine me = (MovementEngine)GameState._weapons.elementAt(i);
-      sb.append("Name: " + me.getWeaponName() + " Speed: " + me.getCurrentSpeed() + " Coord X: " + Math.round(me.getX()) + " Coord Y: " + Math.round(me.getY()) + " Course: " + me.getCurrentDirection() + "\n");
+      sb.append("Name: " + me.getWeaponName() + " Speed: " + me.getCurrentSpeed() + " Coord X: " 
+    		  + Math.round(me.getX()) + " Coord Y: " + Math.round(me.getY()) + " Course: " 
+    		  + me.getCurrentDirection() + "\n");
     }
     area.setText(sb.toString());
   }
