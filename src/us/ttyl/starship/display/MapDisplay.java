@@ -194,11 +194,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		
 		if (temp == 'e')
 		{	
-			//launch missiles (3)
+			//launch missiles
 			
 			// find closest target			
 			Set <Integer> missleSet = new HashSet<Integer>();
-			for(int j = 0; j < 1; j ++)
+			for(int j = 0; j < 8; j ++)
 			{
 				MovementEngine closestTarget = null;
 				int closestTargetRange = 99999999;
@@ -217,13 +217,16 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 							closestTargetRange = currentRange;
 							missleSet.add(closestTarget.hashCode());
 						}
-					}
+					}				
 				}
+				
+				int targetTrack = (int)(GameUtils.getTargetTrack(GameState._weapons.get(0), closestTarget));
+				
 				// once the closest target is selected, launch the missile. 
 				if (closestTarget != null)
 				{					
-					MovementEngine missile = new FollowEngine((int)GameState._weapons.get(0).getCurrentDirection()
-							, (int)GameState._weapons.get(0).getCurrentDirection()
+					MovementEngine missile = new FollowEngine(targetTrack
+							, targetTrack
 							, (int)GameState._weapons.get(0).getX(), (int)GameState._weapons.get(0).getY(), .01, 10, .1, 1
 							, "missile", closestTarget,  GameState._weapons.get(0), 1000);  
 					GameState._weapons.add(missile);
