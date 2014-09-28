@@ -47,7 +47,7 @@ public class MainLoop extends Thread
 				{
 					for(int i = 0; i < GameState._weapons.size(); i ++)
 					{
-						if ((int)(Math.random() * 100) > 85)
+						if ((int)(Math.random() * 100) > 30)
 						{
 							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
 							{
@@ -70,7 +70,7 @@ public class MainLoop extends Thread
 				}
 				
 				// fire gun constantly
-				if (GameState._weapons.get(0).getDestroyedFlag() == false)
+				if (GameState._weapons.get(0).getDestroyedFlag() == false && (GameState._weapons.get(0).getWeaponName().equals("player")))
 				{
 					long currentTimeGun = currentTime;
 					if (currentTimeGun - startTimeGun > 100)
@@ -177,13 +177,12 @@ public class MainLoop extends Thread
 											@Override
 											public void run() 
 											{
-												// TODO Auto-generated method stub
 												try
 												{
-													sleep(2000);
+													sleep(2000);													
 													_gameStatelistener.onPlayerDied();
 												}
-												catch(Exception e)
+												catch(InterruptedException ie)
 												{
 													
 												}

@@ -24,9 +24,17 @@ public class Game extends Thread
 		{
 			@Override
 			public void onPlayerDied() 
-			{
-				MovementEngine player = new FreeEngine(0, 0, 0d, 0d, 2d, 2d, 5, .1d, 0, "player", -1);
-				GameState._weapons.set(0, player);
+			{	
+				GameState._lives = GameState._lives - 1;
+				if (GameState._lives  >= 0)
+				{
+					MovementEngine player = new FreeEngine(0, 0, 0d, 0d, 2d, 2d, 5, .1d, 0, "player", -1);
+					GameState._weapons.set(0, player);
+				}
+				else
+				{
+					GameState._weapons.remove(0);
+				}
 			}
 		};
 		mMainLoop = new MainLoop(gsl);		
