@@ -37,6 +37,7 @@ public class FreeEngine extends MovementEngine
 	    _turnMode = turnMode;
 		_endurance = endurance;
 		_desiredSpeed = desiredSpeed;
+		_origin = this;
 	}
 
 	public void doOther()
@@ -58,11 +59,11 @@ public class FreeEngine extends MovementEngine
 	@Override
 	public void updateSpeedIncrease()
 	{  
-		  _currentSpeed = _currentSpeed + _acceleration;
-		  if (_currentSpeed > _maxSpeed)
-		  {
-			  _currentSpeed = _maxSpeed;
-		  }
+		_currentSpeed = _currentSpeed + _acceleration;
+		if (_currentSpeed > _maxSpeed)
+		{
+		 _currentSpeed = _maxSpeed;
+		}
 	}
   
   	@Override
@@ -78,6 +79,14 @@ public class FreeEngine extends MovementEngine
 	@Override
 	public void updateSpeed()
 	{
+		if (_currentSpeed < _desiredSpeed)
+		{
+			updateSpeedIncrease();
+		}
+		else
+		{
+			updateSpeedDecrease();
+		}
 		// TODO Auto-generated method stub	
 	}
 	

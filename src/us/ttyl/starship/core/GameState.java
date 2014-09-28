@@ -28,5 +28,5 @@ public class GameState
 	public static int _playerEnemyShot = 0;
 	
 	//sound settings
-	public static boolean _muted = false;
+	public static boolean _muted = true;
 }

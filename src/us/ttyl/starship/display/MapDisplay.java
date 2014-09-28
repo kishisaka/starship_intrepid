@@ -86,8 +86,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	
 	    //draw center target (selected)
 	    //g.setColor(new Color(255,0,0));
-	    //g.fillRect(250,250,3,3);
-	    g.drawImage(GameUtils.getImageType(me.getCurrentDirection(), "player"), 232, 232, null);
+	    //g.fillRect(250,250,3,3);	
+	    if (GameState._weapons.get(0).getDestroyedFlag() == false)
+	    {
+	    	g.drawImage(GameUtils.getImageType(GameState._weapons.get(0).getCurrentDirection(), GameState._weapons.get(0).getWeaponName()), 232, 232, null);
+	    }
 	
 	    //draw all other targets relative to center target, don't draw center target
 	    for (int i = 0; i < GameState._weapons.size(); i ++)
@@ -198,10 +201,10 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 			
 			// find closest target			
 			Set <Integer> missleSet = new HashSet<Integer>();
-			for(int j = 0; j < 8; j ++)
+			for(int j = 0; j < 5; j ++)
 			{
 				MovementEngine closestTarget = null;
-				int closestTargetRange = 99999999;
+				int closestTargetRange = Integer.MAX_VALUE;
 				
 				// select a target from weapon list
 				for(int i = 1; i < GameState._weapons.size(); i ++)
@@ -210,7 +213,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 					if (currentShip.getWeaponName().equals("enemy") && missleSet.contains(currentShip.hashCode()) == false)
 					{
 						int currentRange = GameUtils.getRange(GameState._weapons.get(0), currentShip);
-						System.out.println("currentRange: "+ currentRange);
+						//System.out.println("currentRange: "+ currentRange);
 						if (currentRange < closestTargetRange)
 						{
 							closestTarget = currentShip;
