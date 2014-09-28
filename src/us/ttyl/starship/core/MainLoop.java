@@ -2,6 +2,7 @@ package us.ttyl.starship.core;
 
 import us.ttyl.starship.env.EnvBuilder;
 import us.ttyl.starship.listener.GameStateListener;
+import us.ttyl.starship.movement.FollowEngine;
 import us.ttyl.starship.movement.FreeEngine;
 import us.ttyl.starship.movement.LineEngine;
 import us.ttyl.starship.movement.MovementEngine;
@@ -47,7 +48,8 @@ public class MainLoop extends Thread
 				{
 					for(int i = 0; i < GameState._weapons.size(); i ++)
 					{
-						if ((int)(Math.random() * 100) > 30)
+						// guns fire guns until player reaches 500
+						if ((int)(Math.random() * 100) > 60)
 						{
 							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
 							{
@@ -63,6 +65,26 @@ public class MainLoop extends Thread
 								if (GameState._muted == false)
 								{
 									GameState._audioPlayerEnemyShot.play();
+								}
+							}
+						}
+						// enemey fires guns and homing missiles if player has more than 500 points
+						if ((int)(Math.random() * 100) > 90 && GameState._playerScore > 500)
+						{
+							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
+							{
+								startTimeEnemyGun = currentTimeEnemyGun;
+								
+								// get player track
+								int targetTrack = (int)GameUtils.getTargetTrack(GameState._weapons.get(i), GameState._weapons.get(0));
+								
+								MovementEngine bullet = new FollowEngine(targetTrack, targetTrack
+										, (int)GameState._weapons.get(i).getX()
+										, (int)GameState._weapons.get(i).getY(),3, 3, 1, 1, "missile_enemy", GameState._weapons.get(0), GameState._weapons.get(i), 200);  
+								GameState._weapons.add(bullet);
+								if (GameState._muted == false)
+								{
+									GameState._audioPlayerMissile.play();
 								}
 							}
 						}
@@ -148,7 +170,7 @@ public class MainLoop extends Thread
 				{							
 					// ignore cloud, explosions and own ship
 					if (ship.getWeaponName().equals("explosion_particle") == false 
-							&& ship.getWeaponName().equals("missile") == false
+							&& ship.getWeaponName().equals("missile_player") == false
 							&& ship.getWeaponName().equals("gun_player") == false
 							&& ship.getWeaponName().equals("cloud") == false)
 					{

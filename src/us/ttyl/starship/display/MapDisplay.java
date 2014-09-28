@@ -125,10 +125,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		        	g.setColor(new Color(0,255,0));
 		            g.fillRect((int)(_screenSize/2 + x), (int)(_screenSize/2 - y), 3, 3);
 		        }
-		        else if(me.getWeaponName().equals("missile"))
+		        else if(me.getWeaponName().equals("missile_player") || me.getWeaponName().equals("missile_enemy"))
 		        {
-		        	g.setColor(new Color(0,0,0));
-		            g.fillRect((int)(_screenSize/2 + x), (int)(_screenSize/2 - y), 3, 3);
+		        	// g.setColor(new Color(0,0,0));
+		            // g.fillRect((int)(_screenSize/2 + x), (int)(_screenSize/2 - y), 3, 3);
+		        	g.drawImage(GameUtils.getImageType(me.getCurrentDirection(), "missile"),(int)(232 + x), (int)(232 - y), null);
 		        }
 		        else if(me.getWeaponName().equals("cloud"))
 		        {		        
@@ -239,7 +240,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 					MovementEngine missile = new FollowEngine(targetTrack
 							, targetTrack
 							, (int)GameState._weapons.get(0).getX(), (int)GameState._weapons.get(0).getY(), .01, 10, .1, 1
-							, "missile", closestTarget,  GameState._weapons.get(0), 1000);  
+							, "missile_player", closestTarget,  GameState._weapons.get(0), 1000);  
 					GameState._weapons.add(missile);
 					if (GameState._muted == false)
 					{

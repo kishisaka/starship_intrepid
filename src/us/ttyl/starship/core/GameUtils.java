@@ -136,9 +136,11 @@ public class GameUtils
 	 */
 	public static BufferedImage getImageType(int track, String type)
 	{
+		int missleRow = 12 * 12;
+		
 		if (type.equals("cloud"))
 		{
-			return GameState._sprites.get(8*12);
+			return GameState._sprites.get(7*12);
 		}
 		else if (track >= 0 && track < 30)
 		{
@@ -150,6 +152,10 @@ public class GameUtils
 			{
 				return GameState._sprites.get(15);
 			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 3);
+			}
 		}
 		else if (track >= 30 && track < 60)
 		{
@@ -160,6 +166,10 @@ public class GameUtils
 			else if (type.equals("enemy"))
 			{
 				return GameState._sprites.get(14);
+			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 2);
 			}
 		}
 		
@@ -173,6 +183,10 @@ public class GameUtils
 			{
 				return GameState._sprites.get(13);
 			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 1);
+			}
 		}
 		else if (track >= 90 && track < 120)
 		{
@@ -183,6 +197,10 @@ public class GameUtils
 			else if (type.equals("enemy"))
 			{
 				return GameState._sprites.get(12);
+			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 0);
 			}
 		}
 		else if (track >= 120 && track < 150)
@@ -195,6 +213,10 @@ public class GameUtils
 			{
 				return GameState._sprites.get(23);
 			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 11);
+			}
 		}
 		else if (track >= 150 && track < 180)
 		{
@@ -205,6 +227,10 @@ public class GameUtils
 			else if (type.equals("enemy"))
 			{
 				return GameState._sprites.get(22);
+			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 10);
 			}
 		}
 		else if (track >= 180 && track < 210)
@@ -217,6 +243,10 @@ public class GameUtils
 			{
 				return GameState._sprites.get(21);
 			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 9);
+			}
 		}
 		else if (track >= 210 && track < 240)
 		{
@@ -227,6 +257,10 @@ public class GameUtils
 			else if (type.equals("enemy"))
 			{
 				return GameState._sprites.get(20);
+			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 8);
 			}
 		}
 		else if (track >= 240 && track < 270)
@@ -239,6 +273,10 @@ public class GameUtils
 			{
 				return GameState._sprites.get(19);
 			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 7);
+			}
 		}
 		else if (track >= 270 && track < 300)
 		{
@@ -249,6 +287,10 @@ public class GameUtils
 			else if (type.equals("enemy"))
 			{
 				return GameState._sprites.get(18);
+			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 6);
 			}
 		}
 		else if (track >= 300 && track < 330)
@@ -261,6 +303,10 @@ public class GameUtils
 			{
 				return GameState._sprites.get(17);
 			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 5);
+			}
 		}
 		else if (track >= 330 && track < 360)
 		{
@@ -271,6 +317,10 @@ public class GameUtils
 			else if (type.equals("enemy"))
 			{
 				return GameState._sprites.get(16);
+			}
+			else if (type.equals("missile"))
+			{
+				return GameState._sprites.get(missleRow + 4);
 			}
 		}
 		return null;

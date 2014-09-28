@@ -13,7 +13,7 @@ import us.ttyl.starship.movement.MovementEngine;
  */
 public class Game extends Thread
 {
-	MovementDisplay mMovementDisplay = null;
+	//MovementDisplay mMovementDisplay = null;
 	MapDisplay mMapDisplay = null;
 	MainLoop mMainLoop = null;
 	
@@ -39,7 +39,7 @@ public class Game extends Thread
 		};
 		mMainLoop = new MainLoop(gsl);		
 		mMapDisplay = new MapDisplay();
-		mMovementDisplay = new MovementDisplay(mMapDisplay);
+		//mMovementDisplay = new MovementDisplay(mMapDisplay);
 		start();
 	}
 	
@@ -60,7 +60,7 @@ public class Game extends Thread
 	    {
 	    	try
 	      	{
-	    		mMovementDisplay.updateDisplay();
+	    		//mMovementDisplay.updateDisplay();
 	    		mMapDisplay.repaint();
 	        	sleep(16);
 	      	}
