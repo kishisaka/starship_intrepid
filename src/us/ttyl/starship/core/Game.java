@@ -35,6 +35,14 @@ public class Game extends Thread
 				{
 					GameState._weapons.remove(0);
 				}
+				//remove all enemy guns and missiles
+				for(MovementEngine enemyWeapon : GameState._weapons)
+				{
+					if (enemyWeapon.getWeaponName().equals("enenmy_gun") || enemyWeapon.getWeaponName().equals("enenmy_missile") )
+					{
+						enemyWeapon.setEndurance(Integer.MAX_VALUE);
+					}
+				}
 			}
 		};
 		mMainLoop = new MainLoop(gsl);		

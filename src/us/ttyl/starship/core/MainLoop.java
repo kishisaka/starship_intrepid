@@ -49,7 +49,7 @@ public class MainLoop extends Thread
 					for(int i = 0; i < GameState._weapons.size(); i ++)
 					{
 						// guns fire guns until player reaches 500
-						if ((int)(Math.random() * 100) > 60)
+						if ((int)(Math.random() * 100) > 90)
 						{
 							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
 							{
