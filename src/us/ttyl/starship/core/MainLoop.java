@@ -9,6 +9,8 @@ import us.ttyl.starship.movement.MovementEngine;
 
 public class MainLoop extends Thread
 {
+	private int _gunModifier = 0;
+	private int _gunModifierFactor = 3;
 	GameStateListener _gameStatelistener;
 	
 	public MainLoop(GameStateListener gameStateListener)
@@ -44,12 +46,12 @@ public class MainLoop extends Thread
 				
 				// fire enemy guns constantly	
 				long currentTimeEnemyGun = System.currentTimeMillis();
-				if (currentTimeEnemyGun - startTimeEnemyGun > 1000)
+				if (currentTimeEnemyGun - startTimeEnemyGun > 750)
 				{
 					for(int i = 0; i < GameState._weapons.size(); i ++)
 					{
 						// guns fire guns until player reaches 500
-						if ((int)(Math.random() * 100) > 90)
+						if ((int)(Math.random() * 100) > 70)
 						{
 							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
 							{
@@ -92,21 +94,43 @@ public class MainLoop extends Thread
 				}
 				
 				// fire gun constantly
+				// System.out.println("gunModifier:" + _gunModifier);
 				if (GameState._weapons.get(0).getDestroyedFlag() == false && (GameState._weapons.get(0).getWeaponName().equals("player")))
 				{
 					long currentTimeGun = currentTime;
-					if (currentTimeGun - startTimeGun > 100)
+					if (currentTimeGun - startTimeGun > 30)
 					{
 						startTimeGun = currentTimeGun;
-						MovementEngine bullet = new LineEngine(GameState._weapons.get(0).getCurrentDirection(), GameState._weapons.get(0).getCurrentDirection()
+						MovementEngine bullet = new LineEngine(GameState._weapons.get(0).getCurrentDirection() + _gunModifier, GameState._weapons.get(0).getCurrentDirection() + _gunModifier
 								, (int)GameState._weapons.get(0).getX()
-								, (int)GameState._weapons.get(0).getY(),13, 13, 1, 1, "gun_player", GameState._weapons.get(0), 200);  
+								, (int)GameState._weapons.get(0).getY(),8, 8, 1, 1, "gun_player", GameState._weapons.get(0), 200);  
 						GameState._weapons.add(bullet);
+						
+						//stagger bullets a bit
 						if (GameState._muted == false)
 						{
 							GameState._audioPlayerShot.play();
 						}
-					}
+						
+						if (_gunModifier == 0)
+						{
+							_gunModifier = _gunModifierFactor;
+						}
+						else
+						{
+							if (_gunModifier == _gunModifierFactor)
+							{
+								_gunModifier = -1 * _gunModifierFactor;
+							}
+							else
+							{
+								if (_gunModifier == -1 * _gunModifierFactor)
+								{
+									_gunModifier = 0;
+								}
+							}
+						}
+					}					
 				}
 				
 				//create clouds 
@@ -193,7 +217,7 @@ public class MainLoop extends Thread
 											&& GameState._weapons.get(0).getDestroyedFlag() == false)
 									{
 										GameState._weapons.get(0).set_desiredSpeed(0);
-										System.out.println("ship blew up" + ship.getWeaponName());
+										// System.out.println("ship blew up" + ship.getWeaponName());
 										Thread t = new Thread(new Runnable()
 										{
 											@Override
@@ -235,7 +259,7 @@ public class MainLoop extends Thread
 								}
 								currentShip.setEndurance(0);
 								ship.setDestroyedFlag(true);
-								System.out.println(ship.getWeaponName() + " is destroyed.");
+								// System.out.println(ship.getWeaponName() + " is destroyed.");
 								break;
 							}
 						}
