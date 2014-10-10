@@ -140,6 +140,22 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		        	g.setColor(new Color(115,134,230));
 		            g.fillRect((int)(_screenSize/2 + x), (int)(_screenSize/2 - y), 3, 3);
 		        }
+		        else if(me.getWeaponName().equals("missile_smoke"))
+		        {	
+		        	if (me.getEndurance() > 10)
+		        	{
+		        		g.setColor(new Color(247,147,56));
+		        	}
+		        	if (me.getEndurance() >= 5 && me.getEndurance() <= 10)
+		        	{
+		        		g.setColor(new Color(186,205,234));
+		        	}
+		        	if (me.getEndurance() < 5 )
+		        	{
+		        		g.setColor(new Color(0,125,255));
+		        	}
+		            g.fillRect((int)(_screenSize/2 + x), (int)(_screenSize/2 - y), 3, 3);
+		        }
 	    	}	
 	    }
 	    g.drawString("score: " + GameState._playerScore, (int)(50) , (int)(450));
@@ -240,7 +256,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 					MovementEngine missile = new FollowEngine(targetTrack
 							, targetTrack
 							, (int)GameState._weapons.get(0).getX(), (int)GameState._weapons.get(0).getY(), .01, 10, .1, 1
-							, "missile_player", closestTarget,  GameState._weapons.get(0), 1000);  
+							, "missile_player", closestTarget,  GameState._weapons.get(0), 250);  
 					GameState._weapons.add(missile);
 					if (GameState._muted == false)
 					{
@@ -310,21 +326,13 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void mousePressed(MouseEvent e)
 	{		
-		MovementEngine target = findTarget(e.getX(), e.getY());
-		if (target != null)
-		{
-			_selectedTarget = target;
-		}
-		else
-		{
-			int x = e.getX() - 250;
-			int y = e.getY() - 250;
-			double x1 = GameUtils.getA(0, x);
-		    double y1 = GameUtils.getB(0, y);		  
-			int track = _degrev[(int)GameUtils.track(x1, y1)];		
-			GameState._weapons.get(0).setDirection(track);	
-			//System.out.println("desired direction: " + track);
-		}
+		int x = e.getX() - 250;
+		int y = e.getY() - 250;
+		double x1 = GameUtils.getA(0, x);
+	    double y1 = GameUtils.getB(0, y);		  
+		int track = _degrev[(int)GameUtils.track(x1, y1)];		
+		GameState._weapons.get(0).setDirection(track);	
+		//System.out.println("desired direction: " + track);
 	}
 	
 	public MovementEngine findTarget(int x, int y)
@@ -377,20 +385,11 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 	@Override
 	public void mouseMoved(MouseEvent e) 
 	{
-		// TODO Auto-generated method stub
-		MovementEngine target = findTarget(e.getX(), e.getY());
-		if (target != null)
-		{
-			_selectedTarget = target;
-		}
-		else
-		{
-			int x = e.getX() - 250;
-			int y = e.getY() - 250;
-			double x1 = GameUtils.getA(0, x);
-		    double y1 = GameUtils.getB(0, y);		  
-			int track = _degrev[(int)GameUtils.track(x1, y1)];		
-			GameState._weapons.get(0).setDirection(track);	
-		}
+		int x = e.getX() - 250;
+		int y = e.getY() - 250;
+		double x1 = GameUtils.getA(0, x);
+	    double y1 = GameUtils.getB(0, y);		  
+		int track = _degrev[(int)GameUtils.track(x1, y1)];		
+		GameState._weapons.get(0).setDirection(track);	
 	}
 }

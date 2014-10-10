@@ -26,7 +26,7 @@ public class Game extends Thread
 			public void onPlayerDied() 
 			{	
 				GameState._lives = GameState._lives - 1;
-				if (GameState._lives  >= 0)
+				if (GameState._lives >= 0)
 				{
 					MovementEngine player = new FreeEngine(0, 0, 0d, 0d, 2d, 2d, 5, .1d, 0, "player", -1);
 					GameState._weapons.set(0, player);
@@ -40,7 +40,7 @@ public class Game extends Thread
 				{
 					if (enemyWeapon.getWeaponName().equals("enenmy_gun") || enemyWeapon.getWeaponName().equals("enenmy_missile") )
 					{
-						enemyWeapon.setEndurance(Integer.MAX_VALUE);
+						enemyWeapon.setEndurance(Integer.MIN_VALUE);
 					}
 				}
 			}

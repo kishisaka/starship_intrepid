@@ -10,8 +10,8 @@ import us.ttyl.starship.movement.MovementEngine;
 public class MainLoop extends Thread
 {
 	private int _gunModifier = 0;
-	private int _gunModifierFactor = 3;
-	GameStateListener _gameStatelistener;
+	private int _gunModifierSwivel = 3;
+	private GameStateListener _gameStatelistener;
 	
 	public MainLoop(GameStateListener gameStateListener)
 	{
@@ -28,6 +28,7 @@ public class MainLoop extends Thread
 		long startTimeGun = startTime;
 		long startTimeEnemyGun = startTime;
 		long startTimeClouds = startTime;
+		long startTimeMissileSmoke = startTime;
 		
 		//main game loop
 		while(GameState.mIsRunning == true)
@@ -105,31 +106,7 @@ public class MainLoop extends Thread
 								, (int)GameState._weapons.get(0).getX()
 								, (int)GameState._weapons.get(0).getY(),8, 8, 1, 1, "gun_player", GameState._weapons.get(0), 200);  
 						GameState._weapons.add(bullet);
-						
-						//stagger bullets a bit
-						if (GameState._muted == false)
-						{
-							GameState._audioPlayerShot.play();
-						}
-						
-						if (_gunModifier == 0)
-						{
-							_gunModifier = _gunModifierFactor;
-						}
-						else
-						{
-							if (_gunModifier == _gunModifierFactor)
-							{
-								_gunModifier = -1 * _gunModifierFactor;
-							}
-							else
-							{
-								if (_gunModifier == -1 * _gunModifierFactor)
-								{
-									_gunModifier = 0;
-								}
-							}
-						}
+						gunModifier();
 					}					
 				}
 				
@@ -146,17 +123,19 @@ public class MainLoop extends Thread
 				for(int i = 0; i < GameState._weapons.size(); i ++)
 		    	{		    		
 		    		MovementEngine ship = GameState._weapons.get(i);
+		    		if(ship.getWeaponName().equals("missile_player") || ship.getWeaponName().equals("missile_enemy"))
+					{
+		    			// make smoke trail
+		    			MovementEngine missileSmokeTrail = new LineEngine(ship.getCurrentDirection(), ship.getCurrentDirection()
+								, (int)ship.getX()
+								, (int)ship.getY(),0, 0, 0, 0, "missile_smoke", ship, 15);   		    			
+		    			GameState._weapons.add(missileSmokeTrail);
+					}
 		    		ship.run();		    		
 		    		checkCollisions(ship);
-		    	}
+		    	}				
 				
-				//check if player is shot, kill game and show show game over
-				if (GameState._weapons.get(0).getDestroyedFlag() == true)
-				{
-					// System.out.println("player shot down. game over.");
-				} 
-				
-				//check destroyed and remove from list if so
+				//check destroyed and remove from list if so, remove all objects that are over 500 units away from the player)
 				for(int i = 1; i < GameState._weapons.size(); i ++)
 		    	{
 					if ((i > 0 && GameUtils.getRange(GameState._weapons.get(0), GameState._weapons.get(i)) > 500) 
@@ -176,15 +155,43 @@ public class MainLoop extends Thread
 		}
 	}       
 	
+	private void gunModifier()
+	{
+		if (GameState._muted == false)
+		{
+			GameState._audioPlayerShot.play();
+		}
+		
+		if (_gunModifier == 0)
+		{
+			_gunModifier = _gunModifierSwivel;
+		}
+		else
+		{
+			if (_gunModifier == _gunModifierSwivel)
+			{
+				_gunModifier = -1 * _gunModifierSwivel;
+			}
+			else
+			{
+				if (_gunModifier == -1 * _gunModifierSwivel)
+				{
+					_gunModifier = 0;
+				}
+			}
+		}
+	}
+	
 	/**
 	 * check for collisions between ships, bullets, etc
 	 * @param currentShip
 	 */
 	private void checkCollisions(MovementEngine currentShip)
 	{			
-		//ignore clouds and explosions
+		//ignore clouds and explosions and smoke trail
 		if (currentShip.getWeaponName().equals("explosion_particle") == false 
-				&& currentShip.getWeaponName().equals("cloud") == false)
+				&& currentShip.getWeaponName().equals("cloud") == false
+				&& currentShip.getWeaponName().equals("missile_smoke") == false)
 		{
 			for(int i = 0; i < GameState._weapons.size(); i ++)
 			{		
@@ -192,11 +199,12 @@ public class MainLoop extends Thread
 				
 				if (currentShip.getOrigin() != null)
 				{							
-					// ignore cloud, explosions and own ship
+					// ignore cloud, explosions and own ship and smoke trail
 					if (ship.getWeaponName().equals("explosion_particle") == false 
 							&& ship.getWeaponName().equals("missile_player") == false
 							&& ship.getWeaponName().equals("gun_player") == false
-							&& ship.getWeaponName().equals("cloud") == false)
+							&& ship.getWeaponName().equals("cloud") == false
+							&& ship.getWeaponName().equals("missile_smoke") == false)
 					{
 						if (currentShip.getOrigin().getWeaponName().equals(ship.getWeaponName()) == false 
 								&& currentShip.getWeaponName().equals(ship.getWeaponName()) == false
@@ -218,25 +226,25 @@ public class MainLoop extends Thread
 									{
 										GameState._weapons.get(0).set_desiredSpeed(0);
 										// System.out.println("ship blew up" + ship.getWeaponName());
-										Thread t = new Thread(new Runnable()
+										Thread deadWait = new Thread(new Runnable()
 										{
 											@Override
 											public void run() 
 											{
 												try
 												{
+													// wait 2 seconds to show the explosion. 
 													sleep(2000);													
 													_gameStatelistener.onPlayerDied();
 												}
 												catch(InterruptedException ie)
 												{
-													
+													// ignore and continue!
 												}
 											}
 										});
-										t.start();
+										deadWait.start();
 									}
-									
 									
 									GameState._playerScore = GameState._playerScore + 2;
 									GameState._playerEnemyShot = GameState._playerEnemyShot + 1;

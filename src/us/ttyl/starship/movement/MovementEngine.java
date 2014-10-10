@@ -35,9 +35,9 @@ public abstract class MovementEngine
 	  return _acceleration;
   }
   
-  public void getEndurance(int endurance)
+  public int getEndurance()
   {
-	_endurance = endurance;
+	  return _endurance;
   }
   
   public double get_maxSpeed()
@@ -147,6 +147,6 @@ public abstract class MovementEngine
   
   public void setEndurance(int endurance)
   {
-	 _endurance = 0;
+	 _endurance = endurance;
   }
 }
