@@ -2,6 +2,11 @@ package us.ttyl.starship.core;
 
 import us.ttyl.starship.movement.MovementEngine;
 
+/**
+ * controls the speed of the players craft (not used). 
+ * @author test
+ *
+ */
 public class SpeedController extends Thread
 {
 	public void run()
