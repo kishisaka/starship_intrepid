@@ -158,6 +158,7 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 		        }
 	    	}	
 	    }
+	    g.setColor(new Color(0,152,138));
 	    g.drawString("score: " + GameState._playerScore, (int)(50) , (int)(450));
 	    g.drawString("bullet: " + GameState._playerBulletsShot, (int)(150) , (int)(450));
 	    g.drawString("enemy: " + GameState._playerEnemyShot, (int)(250) , (int)(450));
@@ -285,6 +286,16 @@ public class MapDisplay extends JPanel implements KeyListener, MouseListener, Mo
 			GameState._playerEnemyShot = 0;
 			GameState._playerScore = 0;
 			MovementEngine player = new FreeEngine(0, 0, 0d, 0d, 2d, 2d, 5, .1d, 0, "player", -1);
+			
+			//remove all enemy guns and missiles
+			for(int i =0 ; i < GameState._weapons.size(); i ++)
+			{
+				MovementEngine enemyWeapon = GameState._weapons.get(i);
+				if (enemyWeapon.getWeaponName().equals("enenmy_gun") || enemyWeapon.getWeaponName().equals("enenmy_missile") )
+				{
+					GameState._weapons.remove(i);
+				}
+			}
 			GameState._weapons.set(0, player);			
 		}
 	}

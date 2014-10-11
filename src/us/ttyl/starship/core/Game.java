@@ -35,12 +35,14 @@ public class Game extends Thread
 				{
 					GameState._weapons.remove(0);
 				}
+				
 				//remove all enemy guns and missiles
-				for(MovementEngine enemyWeapon : GameState._weapons)
+				for(int i =0 ; i < GameState._weapons.size(); i ++)
 				{
+					MovementEngine enemyWeapon = GameState._weapons.get(i);
 					if (enemyWeapon.getWeaponName().equals("enenmy_gun") || enemyWeapon.getWeaponName().equals("enenmy_missile") )
 					{
-						enemyWeapon.setEndurance(Integer.MIN_VALUE);
+						GameState._weapons.remove(i);
 					}
 				}
 			}

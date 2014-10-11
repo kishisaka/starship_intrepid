@@ -11,6 +11,7 @@ public class GameState
 	public static boolean mIsRunning = false; 
 	public static boolean mIsThrottlePressed = false;
 	
+	//ship/weapons/cloud/player list 
 	public static Vector <MovementEngine>_weapons = new Vector<MovementEngine>();
 	
 	//sprites
