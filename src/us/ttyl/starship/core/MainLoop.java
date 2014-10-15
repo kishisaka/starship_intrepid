@@ -36,9 +36,9 @@ public class MainLoop extends Thread
 			long currentTime = System.currentTimeMillis();
 			try
 			{
-		    	//generate a new ship. 	
-		    	int enemyCount = GameUtils.getTypeCount("enemy"); 
-				if (currentTime - startTime > 300 && enemyCount < 20)
+		    	//generate a new enemy. 	
+		    	int enemyCount = GameUtils.getTypeCount("enemy");
+				if (currentTime - startTime > 100 && enemyCount < 10)
 				{
 					startTime = currentTime;
 			    	EnvBuilder.generateEnemy(GameState._weapons.get(0).getX()
@@ -72,7 +72,7 @@ public class MainLoop extends Thread
 							}
 						}
 						// enemey fires guns and homing missiles if player has more than 500 points
-						if ((int)(Math.random() * 100) > 90 && GameState._playerScore > 500)
+						if ((int)(Math.random() * 100) > 85 && GameState._playerScore > 500)
 						{
 							if (GameState._weapons.get(i).getWeaponName().equals("enemy"))
 							{
@@ -209,7 +209,7 @@ public class MainLoop extends Thread
 						if (currentShip.getOrigin().getWeaponName().equals(ship.getWeaponName()) == false 
 								&& currentShip.getWeaponName().equals(ship.getWeaponName()) == false
 								&& currentShip.getWeaponName().indexOf(ship.getWeaponName()) == -1)									
-						{						
+						{																				
 							int diffX = Math.abs((int)(currentShip.getX() - ship.getX())); 
 							int diffY = Math.abs((int)(currentShip.getY() - ship.getY())); 
 							if (diffX <= 10 && diffY <= 10)
@@ -217,8 +217,7 @@ public class MainLoop extends Thread
 								if (GameState._muted == false)
 								{
 									GameState._audioPlayerEnemyDeath.play();
-								}								
-								
+								}																
 								if (ship.getWeaponName().equals("enemy") || ship.getWeaponName().equals("player") || currentShip.getWeaponName().equals("player"))
 								{									
 									if ((currentShip.getWeaponName().equals("player") || ship.getWeaponName().equals("player")) 

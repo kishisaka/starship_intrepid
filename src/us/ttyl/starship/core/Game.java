@@ -36,14 +36,10 @@ public class Game extends Thread
 					GameState._weapons.remove(0);
 				}
 				
-				//remove all enemy guns and missiles
-				for(int i =0 ; i < GameState._weapons.size(); i ++)
+				//remove all except for player ship
+				for(int i =1 ; i < GameState._weapons.size(); i ++)
 				{
-					MovementEngine enemyWeapon = GameState._weapons.get(i);
-					if (enemyWeapon.getWeaponName().equals("enenmy_gun") || enemyWeapon.getWeaponName().equals("enenmy_missile") )
-					{
-						GameState._weapons.remove(i);
-					}
+					GameState._weapons.remove(i);
 				}
 			}
 		};

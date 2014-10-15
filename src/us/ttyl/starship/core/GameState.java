@@ -29,7 +29,7 @@ public class GameState
 	public static int _playerEnemyShot = 0;
 	
 	//sound settings
-	public static boolean _muted = false;
+	public static boolean _muted = true;
 	
 	// player life counter
 	public static int _lives = 2;

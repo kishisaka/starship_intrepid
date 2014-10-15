@@ -1,6 +1,7 @@
 package us.ttyl.starship.env;
 
 import us.ttyl.starship.core.GameState;
+import us.ttyl.starship.core.GameUtils;
 import us.ttyl.starship.movement.CircleEngine;
 import us.ttyl.starship.movement.LineEngine;
 import us.ttyl.starship.movement.MovementEngine;
@@ -30,14 +31,8 @@ public class EnvBuilder
 	public static void generateEnemy(double playerPositionX, double playerPositionY)
 	{
 		// the enemies
-		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY - 350, 0, 10);
-		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY + 350, 0, 10);
-		generateShip(playerPositionX - 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
-		generateShip(playerPositionX + 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
-		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY - 350, 0, 10);
-		generateShip(playerPositionX - 500 + (int)(Math.random() * 500), playerPositionY + 350, 0, 10);
-		generateShip(playerPositionX - 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
-		generateShip(playerPositionX + 350, playerPositionY - 500 + (int)(Math.random() * 500), 0, 10);
+		double[] coord = GameUtils.getCoordsGivenTrackAndDistance(((int)(Math.random() * 359)), 300);
+		generateShip((int)playerPositionX + coord[0], (int)playerPositionY + coord[1], 0, 10);
 	}
 	
 	public static void generateCloud(double playerPositionX, double playerPositionY, int playerTrack)
